@@ -2,17 +2,14 @@
   (:use [seesaw core tree]
         [keewii-tester.vars]
         [keewii-tester.toolbox])
-  (:import [java.io File FilenameFilter]
-           [javax.swing.filechooser FileSystemView FileNameExtensionFilter]
-           [javax.swing.filechooser.FileFilter])
-  (:require [clojure.string :as string]) )
+  (:require [clojure.java.io :as io]))
 (def chooser (javax.swing.JFileChooser.)) 
 ;Part 1-1: tree
 (def tree-model
   (simple-tree-model
     #(.isDirectory %)
      (fn [f]  (filter #(.isDirectory %) (.listFiles f)))
-    (File. "C:\\Code\\keewii1\\data\\"))) 
+    (io/file basic-path))) 
 ;Part 1-2: list-item of tree
 (defn render-file-item
   [renderer {:keys [value]}]
@@ -37,8 +34,7 @@
                 :center (left-right-split
                           (scrollable (tree    :id :tree :model tree-model :renderer render-file-item  :preferred-size [200 :by 50]))
                           (scrollable (listbox :id :list :renderer render-file-item-filter) :preferred-size [300 :by 50])
-                          :divider-location 3/4
-                          )
+                          :divider-location 3/4)
                 :south  (horizontal-panel 
                           :items [(label :id :status :text "Ready" :h-text-position :center :preferred-size [200 :by 50])
                                   (button :text "Previous"
@@ -61,8 +57,7 @@
         panel (border-panel
                 :north (button :text "Play"
                                :id :play-wav
-                               :mnemonic \N
-                               )
+                               :mnemonic \N)
                 
                 :center (border-panel
                           :north (vertical-panel
@@ -71,19 +66,16 @@
                                            (radio :text "i" :group group)
                                            (radio :text "o" :group group)
                                            (radio :text "u" :group group)])
-                          :south info-label
-                          )
+                          :south info-label)
                 :south (left-right-split 
                          (button :text "Submit"
                                  :mnemonic \N
-                                 :id :submit
-                                 )
+                                 :id :submit)
                          (button :text "Close"
                                  :mnemonic \N
-                                 :id :close
-                                 )
+                                 :id :close)
                          :divider-location 1/2
-                         ) )]
+                         ))]
     (listen group :action
       (fn [e]
         (text! info-label
@@ -112,19 +104,15 @@
           (let [files  (.listFiles dir)]
             (config! (select f [:#current-dir]) :text (.getAbsolutePath dir))
             (config! (select f [:#status]) :text (format "Ready (%d items)" (count files)))
-            (config! (select f [:#list]) :model  files)
-            
-            ))))
+            (config! (select f [:#list]) :model  files)))))
     (listen (select f [:#list]) :selection
             (fn [e]
               (text!  (select f [:#current-dir])
-                       (str (selection e)))
-              ))
+                       (str (selection e)))))
     (listen (select f [:#submit]) :action 
                      (fn [e] (doseq [](submit-save f)
                        (.setSelectedIndex (select f [:#list]) (+ (.getSelectedIndex (select f [:#list])) 1))
-                       (change_path f);change path 
-                       )))
+                       (change_path f))));change path
     (listen (select f [:#close]) :action 
                      (fn [e] (save-close f)))
     (listen (select f [:#play-wav]) :action

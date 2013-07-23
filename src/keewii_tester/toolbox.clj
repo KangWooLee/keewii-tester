@@ -1,12 +1,8 @@
 (ns keewii-tester.toolbox
   (:use [seesaw.core]
-        [clj-audio.core]
+        [clj-audio.core :only [play ->stream]]
         [keewii-tester.vars])
   (:require [clojure.string :as string]))
-
-;(defn parse-int [s]
-;  "str2int" 
-;   (Integer. (re-find  #"\d+" s )))
 
 (defn change_path [f]
   "It change the path in the memory to read dat file by the path of wav file"
