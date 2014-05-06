@@ -22,6 +22,8 @@
 "Submit button: file root/user response/real answer are saved in test-log.txt" 
   (let [datapath (string/replace @filename "\\wav\\" "\\dat\\")]  
     (reset! alphabet  (second (string/split (slurp (str datapath ".dat")) #"\n")))
+    (when (=(text (select f [:#info-label])) (str "Select a vowel you heard")) (text! (select f [:#info-label]) (str "\u0251")) ) 
+    ;solve error with initial sentence error when the answer starts with 'a'
     (spit (str @PATH "test-log.txt") (str (text (select f [:#current-dir])) " " @alphabet " " (text (select f [:#info-label])) "\n")  :append true)
   (if (= @alphabet (str (text (select f [:#info-label])))) (reset! SR (inc @SR))))
   (reset! TOTAL (inc @TOTAL)))

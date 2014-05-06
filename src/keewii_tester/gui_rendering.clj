@@ -57,22 +57,25 @@
         panel (border-panel
                 :north (button :text "Play"
                                :id :play-wav
+                               :preferred-size [270 :by 80]
                                :mnemonic \N)
                 
                 :center (border-panel
                           :north (vertical-panel
-                                   :items [(radio :text "a" :selected? true :group group)
-                                           (radio :text "e" :group group)
+                                   :items [(radio :text "\u0251" :selected? true :group group)
+                                           (radio :text "\u025B" :group group)
                                            (radio :text "i" :group group)
-                                           (radio :text "o" :group group)
+                                           (radio :text "\u0254" :group group)
                                            (radio :text "u" :group group)])
                           :south info-label)
                 :south (left-right-split 
                          (button :text "Submit"
                                  :mnemonic \N
+                                 :preferred-size [270 :by 80]
                                  :id :submit)
                          (button :text "Close"
                                  :mnemonic \N
+                                 :preferred-size [270 :by 80]
                                  :id :close)
                          :divider-location 1/2
                          ))]
@@ -94,7 +97,7 @@
 (def make-frame
   (let [f (frame :title "Myocontrol player" 
        :id "main-frame"
-       :height 400
+       :height 700
        :width 800
        :content (content)
        :visible? false)]

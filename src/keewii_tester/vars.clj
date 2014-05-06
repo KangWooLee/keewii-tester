@@ -1,7 +1,7 @@
 (ns keewii-tester.vars)
 
 "Custom setting"
-(def basic-path "C:\\Code\\keewii-backup\\data")
+(def basic-path "C:\\Users\\Labuser\\Documents\\Github\\keewii-visual\\data")
 
 "Other variables. Do not change defs below" 
 (def alphabet (atom "none"))
