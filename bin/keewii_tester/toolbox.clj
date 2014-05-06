@@ -11,6 +11,8 @@
         cur_path (string/replace cur_file (str "wav\\" cur_wav) "")]
       (reset! PATH cur_path)
       (reset! filename (first (string/split cur_file #"\."))))); exclude extension to get sequence name
+(defn parse-int [s]
+   (Integer. (re-find  #"\d+" s )))
 
 (defn wav-play [f]
   "Play button: play wav file"
@@ -20,7 +22,10 @@
 
 (defn submit-save [f]
 "Submit button: file root/user response/real answer are saved in test-log.txt" 
-  (let [datapath (string/replace @filename "\\wav\\" "\\dat\\")]  
+  (let [datapath (string/replace @filename "\\wav\\" "\\dat\\")
+        ind (parse-int (str datapath))
+        new-ind (vec (remove #(zero? (- % ind)) @Checklist))] 
+    (reset! Checklist new-ind) ; it labels remained index in a vector
     (reset! alphabet  (second (string/split (slurp (str datapath ".dat")) #"\n")))
     (when (=(text (select f [:#info-label])) (str "Select a vowel you heard")) (text! (select f [:#info-label]) (str "\u0251")) ) 
     ;solve error with initial sentence error when the answer starts with 'a'
@@ -28,6 +33,7 @@
   (if (= @alphabet (str (text (select f [:#info-label])))) (reset! SR (inc @SR))))
   (reset! TOTAL (inc @TOTAL)))
 (defn save-close [f]
+  (let [len-checklist (alength  (into-array @Checklist))] 
   "Close button: test-log.txt willbe saved"
   (spit (str @PATH  "test-log.txt") (str  (format "%.2f" (* 100.0 (/ @SR @TOTAL))) "%\n\n")  :append true)
-  (dispose! f)) 
+  (if (= len-checklist 0) (dispose! f) (alert (str "You missed " @Checklist))))) 

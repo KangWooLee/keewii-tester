@@ -33,8 +33,9 @@
                 
                 :center (left-right-split
                           (scrollable (tree    :id :tree :model tree-model :renderer render-file-item  :preferred-size [200 :by 50]))
+                          ;(scrollable (tree    :id :tree :model tree-model :renderer render-file-item  :width 100))
                           (scrollable (listbox :id :list :renderer render-file-item-filter) :preferred-size [300 :by 50])
-                          :divider-location 3/4)
+                          :divider-location 3/4 :resize-weight 0.5)
                 :south  (horizontal-panel 
                           :items [(label :id :status :text "Ready" :h-text-position :center :preferred-size [200 :by 50])
                                   (button :text "Previous"
@@ -45,7 +46,6 @@
                                           :id :next
                                           :preferred-size [270 :by 50]
                                           :mnemonic \N)])
-                ; :divider-location 1/3)
                 )]
     panel))
 
